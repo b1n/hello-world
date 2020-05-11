@@ -23,6 +23,8 @@ env:
   PROJECT_ID: ${{ secrets.RUN_PROJECT }}
   RUN_REGION: europe-west1-b
   SERVICE_NAME: helloworld-golang
+  service_account_email: ${{ secrets.SA_EMAIL }}
+  service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS}}
 
 jobs:
   setup-build-deploy:
