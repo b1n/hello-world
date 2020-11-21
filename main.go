@@ -12,14 +12,19 @@ import (
 )
 
 type Service struct {
-	TelegramBotApi    *tgbotapi.BotAPI
+	TelegramBotApi *tgbotapi.BotAPI
 }
 
 func main() {
 	s := &Service{}
 	s.TelegramBotApi = getTelegramBotApiConn()
 
- go	s.GetMessageFromTelegram()
+	go s.GetMessageFromTelegram()
+
+	msg := tgbotapi.NewMessage(-494747213, "service started")
+	if _, err := s.TelegramBotApi.Send(msg); err != nil {
+		log.Println(err)
+	}
 
 	router := gin.New()
 	router.Use(gin.Recovery())
