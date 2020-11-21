@@ -21,7 +21,7 @@ func main() {
 
 	go s.GetMessageFromTelegram()
 
-	msg := tgbotapi.NewMessage(-494747213, "service started 2")
+	msg := tgbotapi.NewMessage(-494747213, "service started 3")
 	if _, err := s.TelegramBotApi.Send(msg); err != nil {
 		log.Println(err)
 	}
