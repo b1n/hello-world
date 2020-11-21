@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kozubsa
+  name: kozubsa
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kozubsa
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: kozubsa
+    spec:
+      containers:
+        - env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: PORT
+                  name: kozubsa-config-5om8
+            - name: TEST_TEXT
+              valueFrom:
+                configMapKeyRef:
+                  key: TEST_TEXT
+                  name: kozubsa-config-5om8
+            - name: TELEGRAM_BOT_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  key: TELEGRAM_BOT_SECRET
+                  name: kozubsa-config-5om8
+          image: gcr.io/kozub-1tg/github_b1n_hello-world
+          imagePullPolicy: IfNotPresent
+          name: hello-world-1
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  labels:
+    app: kozubsa
+  name: kozubsa-hpa-mykr
+  namespace: default
+spec:
+  maxReplicas: 5
+  metrics:
+    - resource:
+        name: cpu
+        targetAverageUtilization: 80
+      type: Resource
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: kozubsa
+---
+apiVersion: v1
+kind: Service
+metadata:
+  finalizers:
+    - service.kubernetes.io/load-balancer-cleanup
+  labels:
+    app: kozubsa
+  name: kozubsa-service
+  namespace: default
+spec:
+  clusterIP: 10.3.254.4
+  externalTrafficPolicy: Cluster
+  ports:
+    - nodePort: 32483
+      port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: kozubsa
+  sessionAffinity: None
+  type: LoadBalancer
