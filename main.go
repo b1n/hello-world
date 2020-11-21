@@ -80,7 +80,7 @@ func (s *Service) Test(c *gin.Context) {
 	}
 
 	publishDate := time.Now().UTC()
-	messageText := fmt.Sprintf("``` %s ``` %s", publishDate.Format("01.02.2006 15:04:05 MST"), "Post number 8 | group 2 Adult")
+	messageText := fmt.Sprintf("``` %s ``` %s", publishDate.Format("01.02.2006 15:04:05 MST"), "New Test text")
 	var medias []interface{}
 	for i, file := range files {
 		f := tgbotapi.NewInputMediaPhoto(file)

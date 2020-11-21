@@ -2,3 +2,4 @@
 github-ssh-private-key
 kozub-1tg-25ade5d243d5.json
 base64_secrets
+.env
